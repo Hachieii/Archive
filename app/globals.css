@@ -273,3 +273,48 @@
     font-family: var(--font-brand), sans-serif;
   }
 }
+
+@layer base {
+  html {
+    /* Vẫn ép hiện để chống giật layout */
+    overflow-y: scroll !important;
+    scroll-behavior: smooth;
+    /* Firefox: Màu thanh trượt cực mờ / Track trong suốt */
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+    scrollbar-width: thin;
+  }
+}
+
+/* === GHOST SCROLLBAR (Tàng hình) === */
+
+/* 1. Kích thước nhỏ gọn */
+::-webkit-scrollbar {
+  width: 6px; /* Nhỏ hơn nữa cho tinh tế */
+}
+
+/* 2. Rãnh (Track): TRONG SUỐT HOÀN TOÀN */
+/* Biến mất hoàn toàn, không để lại dấu vết */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* 3. Thanh trượt (Thumb): Style "Bóng Ma" */
+::-webkit-scrollbar-thumb {
+  /* Màu trắng nhưng độ trong suốt chỉ 10% (0.1) */
+  /* Trên nền đen, nó sẽ trông như màu xám đen rất tối */
+  background-color: rgba(255, 255, 255, 0.08);
+
+  border-radius: 99px;
+  /* Tạo khoảng hở để nó lơ lửng */
+  border: 2px solid transparent;
+  background-clip: content-box;
+
+  /* Hiệu ứng chuyển màu mượt mà */
+  transition: background-color 0.5s ease;
+}
+
+/* 4. CHỈ KHI HOVER VÀO THANH CUỘN THÌ MỚI HIỆN RÕ */
+::-webkit-scrollbar-thumb:hover {
+  /* Khi trỏ chuột vào, tăng độ đậm lên để dễ cầm nắm */
+  background-color: rgba(255, 255, 255, 0.3);
+}

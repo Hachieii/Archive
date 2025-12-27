@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Roboto, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Sidebar } from "@/components/sidebar";
+import { SidebarProvider } from "@/components/sidebar-context";
+import { AppShell } from "@/components/app-shell";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -41,7 +44,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <SidebarProvider>
+            <Sidebar />
+
+            <AppShell>{children}</AppShell>
+          </SidebarProvider>
         </ThemeProvider>
       </body>
     </html>
