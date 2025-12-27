@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { BookOpen, Flag, User, ChevronLeft, ChevronRight } from "lucide-react";
-import { useSidebar } from "./sidebar-context";
+import { useSidebar } from "../lib/sidebar-context";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
@@ -62,7 +62,10 @@ export function Sidebar() {
       {/* UPDATE: Giảm px-3 xuống px-2 để chừa chỗ cho Icon Slot */}
       <nav className="flex-1 px-2 space-y-2 mt-2 overflow-y-auto overflow-x-hidden">
         {navItems.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive =
+            item.href === "/"
+              ? pathname === "/"
+              : pathname.startsWith(item.href);
           const Icon = item.icon;
 
           return (
