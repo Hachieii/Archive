@@ -3,9 +3,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ================================================= */
-/* 1. ANIMATION DEFINITIONS (Giữ nguyên)             */
-/* ================================================= */
 @keyframes m3FadeInUp {
   from {
     opacity: 0;
@@ -125,14 +122,11 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* === CẬP NHẬT FONT ROBOTO === */
-  /* Font Sans & Brand: Dùng Roboto */
   --font-sans: var(--font-roboto), "Roboto", ui-sans-serif, system-ui,
     sans-serif;
   --font-brand: var(--font-roboto), "Roboto", ui-sans-serif, system-ui,
     sans-serif;
 
-  /* Font Mono: Dùng Roboto Mono */
   --font-mono: var(--font-roboto-mono), "Roboto Mono", ui-monospace, monospace;
 
   /* Radius */
@@ -146,7 +140,6 @@
 }
 
 @layer utilities {
-  /* Animation Utilities (Giữ nguyên) */
   .animate-m3-fade-in {
     animation: m3FadeInUp 0.5s cubic-bezier(0.05, 0.7, 0.1, 1) both;
   }
@@ -174,7 +167,6 @@
   .animate-m3-shake {
     animation: m3Shake 0.4s cubic-bezier(0.2, 0, 0, 1);
   }
-
   .ease-m3-emphasized {
     transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
@@ -186,9 +178,6 @@
   }
 }
 
-/* ================================================= */
-/* 2. THEME ZINC (Giữ nguyên)                        */
-/* ================================================= */
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -258,7 +247,6 @@
   }
 
   html {
-    /* Áp dụng biến Roboto */
     font-family: var(--font-roboto), "Roboto", ui-sans-serif, system-ui,
       sans-serif;
   }
@@ -266,17 +254,15 @@
   body {
     @apply bg-background text-foreground;
     -webkit-font-smoothing: antialiased;
-    /* Xóa font-weight: 525 vì Roboto chuẩn không hỗ trợ, dùng mặc định (400) */
+    font-weight: 500;
   }
 
-  /* Font Code mới */
   code,
   pre,
   kbd {
     font-family: var(--font-mono), monospace;
   }
 
-  /* Font Brand mới (Dùng chung Roboto) */
   h1,
   h2,
   h3,
