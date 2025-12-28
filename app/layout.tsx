@@ -3,7 +3,7 @@ import { Roboto, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Sidebar } from "@/components/sidebar";
-import { SidebarProvider } from "@/components/sidebar-context";
+import { SidebarProvider } from "@/lib/sidebar-context";
 import { AppShell } from "@/components/app-shell";
 
 const roboto = Roboto({

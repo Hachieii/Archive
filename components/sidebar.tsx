@@ -25,7 +25,7 @@ export function Sidebar() {
       )}
     >
       {/* 1. Header Area */}
-      <div className="flex h-24 items-center relative flex-shrink-0 px-2">
+      <div className="flex h-24 items-center relative shrink-0 px-2">
         {/* Logo Text 
             - Thay left-20 thành left-16 (để khớp với độ rộng icon slot mới)
             - Thêm pl-2 để căn chỉnh với padding của Nav

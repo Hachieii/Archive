@@ -1,6 +1,6 @@
 "use client";
 
-import { useSidebar } from "./sidebar-context";
+import { useSidebar } from "../lib/sidebar-context";
 import { cn } from "@/lib/utils";
 
 export function AppShell({ children }: { children: React.ReactNode }) {

@@ -25,31 +25,27 @@ export default function CleanCardNoFloat() {
               </p>
 
               <div className="flex flex-wrap gap-4 pt-4 animate-m3-fade-in delay-200 justify-center sm:justify-start">
-                <Button
-                  nativeButton={false}
-                  render={<Link href="/ctf-writeup" />}
-                  className="group h-12 px-6 rounded-full border border-primary/20 bg-foreground/5 text-primary transition-all duration-500 ease-m3-emphasized hover:bg-primary/20 hover:border-foreground/10 hover:shadow-md active:scale-[0.98] active:shadow-none"
-                >
-                  <div className="mr-2 p-1 rounded-full bg-primary/20 group-hover:bg-primary/30 transition-colors duration-300 ease-m3-emphasized">
-                    <Flag className="w-4 h-4" />
-                  </div>
-                  <span className="font-semibold tracking-wide">
-                    CTF Writeups
-                  </span>
-                </Button>
+                <Link href="/ctf-writeup">
+                  <Button className="group h-12 px-6 rounded-full border border-primary/20 bg-foreground/5 text-primary transition-all duration-500 ease-m3-emphasized hover:bg-primary/20 hover:border-foreground/10 hover:shadow-md active:scale-[0.98] active:shadow-none">
+                    <div className="mr-2 p-1 rounded-full bg-primary/20 group-hover:bg-primary/30 transition-colors duration-300 ease-m3-emphasized">
+                      <Flag className="w-4 h-4" />
+                    </div>
+                    <span className="font-semibold tracking-wide">
+                      CTF Writeups
+                    </span>
+                  </Button>
+                </Link>
 
-                <Button
-                  nativeButton={false}
-                  render={<Link href="/notes" />}
-                  className="group h-12 px-6 rounded-full border border-primary/20 bg-foreground/5 text-primary transition-all duration-500 ease-m3-emphasized hover:bg-primary/20 hover:border-foreground/10 hover:shadow-md active:scale-[0.98] active:shadow-none"
-                >
-                  <div className="mr-2 p-1 rounded-full bg-foreground/10 group-hover:bg-foreground/20 transition-colors duration-300 ease-m3-emphasized">
-                    <BookOpen className="w-4 h-4" />
-                  </div>
-                  <span className="font-semibold tracking-wide">
-                    Learning Notes
-                  </span>
-                </Button>
+                <Link href="/notes">
+                  <Button className="group h-12 px-6 rounded-full border border-primary/20 bg-foreground/5 text-primary transition-all duration-500 ease-m3-emphasized hover:bg-primary/20 hover:border-foreground/10 hover:shadow-md active:scale-[0.98] active:shadow-none">
+                    <div className="mr-2 p-1 rounded-full bg-foreground/10 group-hover:bg-foreground/20 transition-colors duration-300 ease-m3-emphasized">
+                      <BookOpen className="w-4 h-4" />
+                    </div>
+                    <span className="font-semibold tracking-wide">
+                      Learning Notes
+                    </span>
+                  </Button>
+                </Link>
               </div>
             </div>
 
