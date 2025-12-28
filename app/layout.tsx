@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Sidebar } from "@/components/sidebar";
 import { SidebarProvider } from "@/lib/sidebar-context";
 import { AppShell } from "@/components/app-shell";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -50,6 +52,8 @@ export default function RootLayout({
             <AppShell>{children}</AppShell>
           </SidebarProvider>
         </ThemeProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
