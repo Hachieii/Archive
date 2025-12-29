@@ -23,12 +23,6 @@ const navItems = [
   { name: "Learning Notes", href: "/notes", icon: BookOpen },
 ];
 
-// M3 Standard Easing
-const M3_TRANSITION = {
-  duration: 0.3,
-  ease: [0.2, 0.0, 0, 1.0],
-} as const;
-
 export function Sidebar() {
   const pathname = usePathname();
   const { isCollapsed, toggleSidebar } = useSidebar();
@@ -108,26 +102,32 @@ export function Sidebar() {
               onClick={() => mobileMode && setOpenMobile(false)}
               title={!mobileMode && isCollapsed ? item.name : ""}
               className={cn(
-                "group flex items-center h-12 relative rounded-full transition-all duration-300 ease-[cubic-bezier(0.2,0.0,0,1.0)]",
+                // Base styles
+                "group flex items-center h-12 relative rounded-full transition-all duration-200",
+                // Hover effect (chỉ khi không active)
+                !isActive && "hover:bg-foreground/5",
+                // Click Effect: Nhấn xuống sẽ co lại (active:scale-95) -> Tạo cảm giác mượt mà vật lý
+                "active:scale-95",
+                // Text colors
                 isActive
-                  ? "text-primary font-bold shadow-none"
-                  : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground font-medium"
+                  ? "text-primary font-bold"
+                  : "text-muted-foreground hover:text-foreground font-medium"
               )}
             >
-              {/* MAGIC PILL */}
+              {/* --- STATIC ACTIVE PILL (GIẢI PHÁP ỔN ĐỊNH NHẤT) --- */}
+              {/* Thay vì animate, chúng ta chỉ render nó ra ngay lập tức.
+                  Điều này đảm bảo khi reload trang, nó "đã ở đó" rồi, không bị pop-in.
+              */}
               {isActive && (
-                <motion.div
-                  layoutId="sidebar-active-pill"
-                  className="absolute inset-0 bg-primary/15 rounded-full z-0"
-                  transition={M3_TRANSITION}
-                />
+                <div className="absolute inset-0 bg-primary/15 rounded-full z-0" />
               )}
+              {/* -------------------------------------------------- */}
 
               {/* ICON */}
               <div className="w-16 shrink-0 flex items-center justify-center h-full relative z-10">
                 <Icon
                   className={cn(
-                    "w-5 h-5 transition-transform duration-300 ease-[cubic-bezier(0.2,0.0,0,1.0)]",
+                    "w-5 h-5 transition-transform duration-300",
                     isActive && "fill-current scale-105",
                     !isActive && "group-hover:scale-110"
                   )}
@@ -197,7 +197,6 @@ export function Sidebar() {
       <aside
         className={cn(
           "fixed top-0 left-0 z-50 h-screen flex-col border-r border-border/40 bg-background/60 backdrop-blur-xl overflow-hidden hidden lg:flex",
-          // Luôn bật transition vì server đã render đúng width ngay từ đầu
           "transition-[width] duration-300 ease-[cubic-bezier(0.2,0.0,0,1.0)]",
           isCollapsed ? "w-20" : "w-64"
         )}
