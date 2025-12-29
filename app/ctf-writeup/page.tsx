@@ -188,7 +188,7 @@ const CompetitionCard = ({
                   })}
                 </TabsList>
 
-                <div className="relative min-h-[100px]">
+                <div className="relative min-h-25">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={activeTab}
