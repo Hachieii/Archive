@@ -5,8 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Sidebar } from "@/components/sidebar";
 import { SidebarProvider } from "@/lib/sidebar-context";
 import { AppShell } from "@/components/app-shell";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import { cookies } from "next/headers";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -26,11 +25,18 @@ export const metadata: Metadata = {
   description: "A collection of my CTF Writeups and learning notes",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // 1. Dùng await cookies() (Bắt buộc ở Next.js 15)
+  const cookieStore = await cookies();
+
+  // 2. Đọc đúng tên cookie mới: sidebar_collapsed
+  const defaultCollapsed =
+    cookieStore.get("sidebar_collapsed")?.value === "true";
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -38,6 +44,7 @@ export default function RootLayout({
           ${roboto.variable} 
           ${robotoMono.variable} 
           antialiased
+          bg-background text-foreground
         `}
       >
         <ThemeProvider
@@ -46,14 +53,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SidebarProvider>
+          {/* Truyền trạng thái đã đọc được vào Provider */}
+          <SidebarProvider defaultCollapsed={defaultCollapsed}>
             <Sidebar />
-
             <AppShell>{children}</AppShell>
           </SidebarProvider>
         </ThemeProvider>
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );

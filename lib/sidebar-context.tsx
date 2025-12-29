@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 type SidebarContextType = {
   isCollapsed: boolean;
@@ -9,21 +9,23 @@ type SidebarContextType = {
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
-export function SidebarProvider({ children }: { children: React.ReactNode }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
-  // (Optional) Lưu trạng thái vào LocalStorage để F5 không bị mất
-  useEffect(() => {
-    const saved = localStorage.getItem("sidebar-collapsed");
-    if (saved) setIsCollapsed(JSON.parse(saved));
-  }, []);
+export function SidebarProvider({
+  children,
+  defaultCollapsed = false,
+}: {
+  children: React.ReactNode;
+  defaultCollapsed?: boolean;
+}) {
+  // Khởi tạo state từ giá trị Server truyền xuống
+  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
 
   const toggleSidebar = () => {
-    setIsCollapsed((prev) => {
-      const newState = !prev;
-      localStorage.setItem("sidebar-collapsed", JSON.stringify(newState));
-      return newState;
-    });
+    const newState = !isCollapsed;
+    setIsCollapsed(newState);
+
+    // CẬP NHẬT TÊN COOKIE: sidebar_collapsed
+    // Thêm SameSite=Lax để đảm bảo an toàn và lưu ổn định hơn
+    document.cookie = `sidebar_collapsed=${newState}; path=/; max-age=31536000; SameSite=Lax`;
   };
 
   return (
@@ -35,7 +37,8 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
 
 export function useSidebar() {
   const context = useContext(SidebarContext);
-  if (!context)
-    throw new Error("useSidebar must be used within SidebarProvider");
+  if (!context) {
+    throw new Error("useSidebar must be used within a SidebarProvider");
+  }
   return context;
 }

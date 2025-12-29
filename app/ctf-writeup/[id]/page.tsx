@@ -18,8 +18,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { competitionsData } from "@/lib/ctf-data";
 
-const M3_EMPHASIZED = { duration: 0.5, ease: [0.2, 0.0, 0.0, 1.0] as const };
-const M3_ENTER = { duration: 0.3, ease: [0.0, 0.0, 0.2, 1.0] as const };
+// --- M3 CONSTANTS (SYNCED) ---
+const M3_EASE_STANDARD: [number, number, number, number] = [0.2, 0.0, 0, 1.0];
+const ANIMATION_DURATION = 0.3;
 
 export default function CompetitionDetailPage({
   params,
@@ -45,13 +46,22 @@ export default function CompetitionDetailPage({
     [competition.challenges, activeTab]
   );
 
+  // Animation props dùng chung cho Pill (Tab)
+  const pillAnimationProps = {
+    initial: { opacity: 0, scale: 0.9 },
+    animate: { opacity: 1, scale: 1 },
+    exit: { opacity: 0, scale: 0.95 },
+    transition: { duration: 0.2, ease: M3_EASE_STANDARD },
+  };
+
   return (
-    <div className="container max-w-5xl mx-auto px-6 py-12 min-h-screen animate-m3-fade-in pb-40">
-      {/* NAVIGATION: Đã đổi thành Link để đảm bảo hoạt động 100% */}
-      <Link href="/ctf-writeup" passHref>
+    <div className="container max-w-5xl mx-auto px-6 py-12 min-h-screen pb-40">
+      {/* NAVIGATION: Fade In + Scale nhẹ */}
+      <Link href="/ctf-writeup">
         <motion.div
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, ease: M3_EASE_STANDARD }}
           className="group flex items-center gap-2 text-muted-foreground hover:text-primary mb-8 transition-colors cursor-pointer w-fit"
         >
           <div className="w-8 h-8 rounded-full border border-border/50 flex items-center justify-center group-hover:border-primary/50 group-hover:bg-primary/10 transition-all">
@@ -61,12 +71,11 @@ export default function CompetitionDetailPage({
         </motion.div>
       </Link>
 
-      {/* HERO HEADER: Đã xóa phần Download & Share */}
+      {/* HERO HEADER: Chỉ Fade + Scale (Bỏ trượt dọc) */}
       <motion.div
-        layout
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={M3_EMPHASIZED}
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4, ease: M3_EASE_STANDARD }}
         className="relative rounded-[32px] bg-card border-2 border-border/40 overflow-hidden p-8 md:p-12 mb-12 shadow-sm"
       >
         <Flag className="absolute -right-6 -bottom-12 w-64 h-64 text-foreground/5 rotate-12 pointer-events-none" />
@@ -104,63 +113,72 @@ export default function CompetitionDetailPage({
               {competition.description}
             </p>
           </div>
-
-          {/* Đã xóa div chứa Button tại đây */}
         </div>
       </motion.div>
 
       {/* TABS SECTION */}
       <div className="space-y-6">
-        <div className="flex items-center gap-2 px-2">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.1, duration: 0.4 }}
+          className="flex items-center gap-2 px-2"
+        >
           <h2 className="text-xl font-bold font-brand">Challenges</h2>
           <div className="h-px flex-1 bg-border/50 ml-4" />
-        </div>
+        </motion.div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="flex flex-wrap gap-2 mb-8 bg-transparent p-0 w-full justify-start h-auto">
-            {categories.map((cat) => (
-              <TabsTrigger
-                key={cat}
-                value={cat}
-                className={cn(
-                  "group/tab relative isolate rounded-full px-6 py-2.5 text-sm outline-none ring-0 cursor-pointer transition-all duration-300",
-                  "bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none",
-                  "hover:bg-zinc-100 dark:hover:bg-zinc-800/50"
-                )}
-              >
-                <span
-                  className="relative z-20 font-medium transition-colors duration-200"
-                  style={{
-                    color:
-                      activeTab === cat
-                        ? "oklch(0.205 0 0)"
-                        : "oklch(0.985 0 0)",
-                    fontWeight: activeTab === cat ? 600 : 500,
-                  }}
+            {categories.map((cat) => {
+              const isActive = activeTab === cat;
+              return (
+                <TabsTrigger
+                  key={cat}
+                  value={cat}
+                  className={cn(
+                    "group/tab relative isolate rounded-full px-6 py-2.5 text-sm outline-none ring-0 cursor-pointer transition-all duration-300",
+                    "bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none",
+                    "hover:bg-zinc-100 dark:hover:bg-zinc-800/50"
+                  )}
                 >
-                  {cat}
-                </span>
+                  <span
+                    className={cn(
+                      "relative z-20 font-medium transition-colors duration-200",
+                      isActive
+                        ? "text-primary font-bold"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    {cat}
+                  </span>
 
-                {activeTab === cat && (
-                  <motion.div
-                    layoutId="detail-pill"
-                    className="absolute inset-0 bg-primary rounded-full z-10 shadow-sm"
-                    transition={M3_EMPHASIZED}
-                  />
-                )}
-              </TabsTrigger>
-            ))}
+                  {/* PILL: SYNC STYLE (Ghost Pill, Scale Animation) */}
+                  <AnimatePresence>
+                    {isActive && (
+                      <motion.div
+                        {...pillAnimationProps}
+                        className="absolute inset-0 bg-primary/10 rounded-full z-10"
+                      />
+                    )}
+                  </AnimatePresence>
+                </TabsTrigger>
+              );
+            })}
           </TabsList>
 
           <div className="relative min-h-50">
-            <AnimatePresence mode="popLayout">
+            <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
-                layout
-                initial={{ opacity: 0, x: -20, scale: 0.95 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                exit={{ opacity: 0, x: 20, scale: 0.95 }}
-                transition={M3_ENTER}
+                // CONTENT: Fade In + Scale 0.98 -> 1 (Không trượt)
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{
+                  duration: ANIMATION_DURATION,
+                  ease: M3_EASE_STANDARD,
+                }}
                 className="grid grid-cols-1 md:grid-cols-2 gap-4"
               >
                 {currentChallenges.map((chall) => (
@@ -172,7 +190,7 @@ export default function CompetitionDetailPage({
                     className="group/card block h-full"
                   >
                     <motion.div
-                      layout="position"
+                      layout="position" // Giữ layout animation khi re-order (optional)
                       className="h-full p-6 rounded-[24px] bg-card border-2 border-border/40 hover:border-primary/40 hover:shadow-xl hover:bg-card/80 hover:-translate-y-1 transition-all duration-300 flex flex-col relative overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" />
